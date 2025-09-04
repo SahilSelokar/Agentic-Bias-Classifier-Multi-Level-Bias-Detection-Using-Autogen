@@ -1,0 +1,21 @@
+{
+  "issue_types": [
+    "none",
+    "formatting/typographical error",
+    "date formatting issue",
+    "minor translation differences",
+    "missing data",
+    "incomplete data",
+    "irrelevant data",
+    "other"
+  ],
+  "bias_types": [
+    "none",
+    "gender bias",
+    "political bias",
+    "social bias",
+    "cultural bias",
+    "religious bias",
+    "other"
+  ]
+}

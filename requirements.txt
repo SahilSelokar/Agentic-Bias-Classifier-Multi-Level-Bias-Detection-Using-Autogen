@@ -1,0 +1,7 @@
+streamlit
+datasets
+pandas
+tqdm
+autogen_core
+autogen_agentchat
+autogen_ext

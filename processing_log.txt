@@ -1,0 +1,5 @@
+Processing started...
+Row 0: Issues: ['minor translation differences'], Bias: ['none']
+Row 1: Issues: ['minor translation differences'], Bias: ['none']
+
+Processing completed.

@@ -3,7 +3,7 @@
 A real-time, agent-powered tool for detecting bias and data issues in any CSV dataset. Upload your CSV, select columns, and let AI agents analyze each row for quality, completeness, and bias—no matter the domain or language.
 
 ## Features
-- **Dynamic CSV Support:** Works with any CSV, not just translation datasets.
+- **Dynamic CSV Support:** Works with any CSV for any kind of datasets.
 - **Agentic Analysis:** Multiple AI agents review each row for issues and bias.
 - **Configurable Types:** Issue and bias types are managed via `types.json` for easy updates.
 - **Streamlit UI:** Upload CSVs, select columns/ranges, and view results interactively.

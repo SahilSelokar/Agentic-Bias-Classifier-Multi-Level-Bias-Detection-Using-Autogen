@@ -89,8 +89,9 @@ if st.button("Run Agentic Processing"):
     if processed_csv_path is None or not os.path.exists(processed_csv_path):
         st.error("Please upload a CSV and select a range first.")
     else:
+        # Pass selected issue and bias types to process_csv
         async def run_agentic():
-            await process_csv(processed_csv_path, good_csv, issues_csv, log_file)
+            await process_csv(processed_csv_path, good_csv, issues_csv, log_file, columns_to_check=None, issue_types=selected_issue_types, bias_types=selected_bias_types)
         with st.spinner("Processing dataset with agents..."):
             progress_bar = st.progress(0)
             try:
@@ -107,17 +108,8 @@ if st.button("Run Agentic Processing"):
             st.dataframe(good_df.head(10))
             st.write("## Issues Sample")
             st.dataframe(issues_df.head(10))
-            # --- Reporting: Visualize Issue/Bias Types ---
-            if not issues_df.empty:
-                # Split comma-separated values for accurate counts
-                def split_and_flatten(series):
-                    return pd.Series([item.strip() for sublist in series.dropna().astype(str).str.split(',') for item in sublist])
-                issue_counts = split_and_flatten(issues_df['issues']).value_counts()
-                bias_counts = split_and_flatten(issues_df['bias']).value_counts()
-                st.write("### Issue Type Distribution")
-                st.bar_chart(issue_counts)
-                st.write("### Bias Type Distribution")
-                st.bar_chart(bias_counts)
+            # ...existing code...
+            # ...existing code...
 
 # --- Step 3: Logs & Download ---
 st.header("Step 3: Logs & Download")

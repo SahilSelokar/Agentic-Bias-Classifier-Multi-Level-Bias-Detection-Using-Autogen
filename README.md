@@ -11,13 +11,13 @@ A real-time, agent-powered tool for detecting bias and data issues in any CSV da
 - **Modular Model Clients:** Easily swap or add model clients (Groq, OpenAI, etc.) without refactoring the whole codebase.
 - **Robust Parsing:** Handles agent responses with explanations, markdown, or formatting.
 - **Flexible & Extensible:** Add new issue/bias types by editing `types.json`—no code changes needed.
-- **Charts & Reporting:** Visualize flagged data with interactive charts.
+- **Reporting:** View flagged data and download results as CSV files.
 
 ## How It Works
 1. **Upload CSV:** Use the Streamlit UI to upload your dataset.
 2. **Select Columns/Range:** Choose which columns and rows to analyze.
 3. **Agentic Processing:** AI agents analyze each row, selecting from predefined or custom issue and bias types.
-4. **Results:** Clean rows are saved to `GOOD_CSV`, flagged rows to `ISSUES_CSV`, and logs are written for traceability.
+4. **Results:** Clean rows are saved to `good.csv`, flagged rows to `issues.csv`, and logs are written for traceability.
 
 ## Setup
 1. **Clone the repo:**

@@ -37,6 +37,9 @@ AGENT_POOLS = {
 		{"name": "ReEval_Groq", "model": "meta-llama/llama-4-maverick-17b-128e-instruct", "api_key": os.getenv("GROQ_API_KEY_2"), "base_url": "https://api.groq.com/openai/v1", "model_info": llama4_maverick_info},
 		{"name": "ReEval_Groq", "model": "meta-llama/llama-4-maverick-17b-128e-instruct", "api_key": os.getenv("GROQ_API_KEY_3"), "base_url": "https://api.groq.com/openai/v1", "model_info": llama4_maverick_info},
 	],
+	"MetricAgent": [
+		{"name": "MetricAgent_Groq", "model": "meta-llama/llama-4-maverick-17b-128e-instruct", "api_key": os.getenv("GROQ_API_KEY_1"), "base_url": "https://api.groq.com/openai/v1", "model_info": llama4_maverick_info}
+	]
 }
 
 AGENT_COOLDOWN_SECONDS = 60
@@ -71,7 +74,7 @@ def place_agent_on_cooldown(agent_name: str, agent_status):
 	cooldown_time = time.time() + AGENT_COOLDOWN_SECONDS
 	agent_status[agent_name]["cooldown_until"] = cooldown_time
 
-async def process_csv(INPUT_CSV, GOOD_CSV, ISSUES_CSV, LOG_FILE, columns_to_check=None):
+async def process_csv(INPUT_CSV, GOOD_CSV, ISSUES_CSV, LOG_FILE, columns_to_check=None, issue_types=None, bias_types=None):
 	df = pd.read_csv(INPUT_CSV)
 	agent_status, next_agent_idx = init_agent_status_and_idx()
 	if os.path.exists(GOOD_CSV):
@@ -82,6 +85,11 @@ async def process_csv(INPUT_CSV, GOOD_CSV, ISSUES_CSV, LOG_FILE, columns_to_chec
 	pd.DataFrame(columns=list(df.columns) + ["issues", "bias"]).to_csv(ISSUES_CSV, index=False)
 	with open(LOG_FILE, "w", encoding="utf-8") as log:
 		log.write("Processing started...\n")
+	# Use provided types or fallback to static ones
+	if issue_types is None:
+		issue_types = ISSUE_TYPES
+	if bias_types is None:
+		bias_types = BIAS_TYPES
 	for idx, row in tqdm(df.iterrows(), total=len(df), desc="Processing"):
 		# Build a dynamic prompt for selected columns
 		if columns_to_check is None:
@@ -90,8 +98,8 @@ async def process_csv(INPUT_CSV, GOOD_CSV, ISSUES_CSV, LOG_FILE, columns_to_chec
 		prompt = (
 			f"Analyze the following data for any possible issues and bias.\n"
 			f"{col_data}\n\n"
-			f"Choose ONLY from these issue types: {ISSUE_TYPES}.\n"
-			f"Choose ONLY from these bias types: {BIAS_TYPES}.\n"
+			f"Choose ONLY from these issue types: {issue_types}.\n"
+			f"Choose ONLY from these bias types: {bias_types}.\n"
 			"Respond with a JSON object with two fields: 'issues' (list of selected issue types) and 'bias' (list of selected bias types).\n"
 			"If no issue or bias is present, respond with ['none'] for both fields. Do not invent new types. Example:\n"
 			'{"issues": ["none"], "bias": ["none"]}'
@@ -127,7 +135,9 @@ async def process_csv(INPUT_CSV, GOOD_CSV, ISSUES_CSV, LOG_FILE, columns_to_chec
 					max_turns=3
 				)
 				task = TextMessage(content=prompt.strip(), source="user")
+				start_agent = time.time()
 				result = await team.run(task=task)
+				end_agent = time.time()
 				last_msg = result.messages[-1].content.strip()
 				# Try to parse the agent's response as JSON
 				try:
@@ -191,5 +201,3 @@ async def process_csv(INPUT_CSV, GOOD_CSV, ISSUES_CSV, LOG_FILE, columns_to_chec
 					with open(LOG_FILE, "a", encoding="utf-8") as log:
 						log.write(f"Row {idx} SKIPPED due to UNHANDLED ERROR: {err_msg}\n")
 					break
-	with open(LOG_FILE, "a", encoding="utf-8") as log:
-		log.write("\nProcessing completed.\n")

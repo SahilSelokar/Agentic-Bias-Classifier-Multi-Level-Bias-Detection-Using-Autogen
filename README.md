@@ -7,20 +7,23 @@ A real-time, agent-powered tool for detecting bias and data issues in any CSV da
 - **Agentic Analysis:** Multiple AI agents review each row for issues and bias.
 - **Configurable Types:** Issue and bias types are managed via `types.json` for easy updates.
 - **Streamlit UI:** Upload CSVs, select columns/ranges, and view results interactively.
+- **Custom Types:** Add your own issue/bias types directly in the UI.
+- **Modular Model Clients:** Easily swap or add model clients (Groq, OpenAI, etc.) without refactoring the whole codebase.
 - **Robust Parsing:** Handles agent responses with explanations, markdown, or formatting.
 - **Flexible & Extensible:** Add new issue/bias types by editing `types.json`—no code changes needed.
+- **Charts & Reporting:** Visualize flagged data with interactive charts.
 
 ## How It Works
 1. **Upload CSV:** Use the Streamlit UI to upload your dataset.
 2. **Select Columns/Range:** Choose which columns and rows to analyze.
-3. **Agentic Processing:** AI agents analyze each row, selecting from predefined issue and bias types.
+3. **Agentic Processing:** AI agents analyze each row, selecting from predefined or custom issue and bias types.
 4. **Results:** Clean rows are saved to `GOOD_CSV`, flagged rows to `ISSUES_CSV`, and logs are written for traceability.
 
 ## Setup
 1. **Clone the repo:**
    ```sh
-   git clone https://github.com/yourusername/agentic-bias-classifier.git
-   cd agentic-bias-classifier
+   git clone https://github.com/SahilSelokar/Agentic-Bias-Classifier-Multi-Level-Bias-Detection-Using-Autogen.git
+   cd Agentic-Bias-Classifier-Multi-Level-Bias-Detection-Using-Autogen
    ```
 2. **Install dependencies:**
    ```sh
@@ -43,9 +46,9 @@ A real-time, agent-powered tool for detecting bias and data issues in any CSV da
    ```
 2. **Upload your CSV and run analysis.**
 3. **Check output files:**
-   - `GOOD_CSV`: Rows with no issues or bias.
-   - `ISSUES_CSV`: Rows flagged for issues or bias.
-   - `LOG_FILE`: Processing logs and errors.
+   - `good.csv`: Rows with no issues or bias.
+   - `issues.csv`: Rows flagged for issues or bias.
+   - `processing_log.txt`: Processing logs and errors.
 
 ## File Structure
 - `User_Interface.py` — Streamlit UI for upload and analysis
@@ -56,8 +59,8 @@ A real-time, agent-powered tool for detecting bias and data issues in any CSV da
 - `README.md` — Project documentation
 
 ## Customization
-- **Add new types:** Edit `types.json`.
-- **Change agent logic:** Modify prompts in `Agents.py`.
+- **Add new types:** Edit `types.json` or use the UI to add custom types.
+- **Change agent logic or model clients:** Modify prompts or swap model clients in `Agents.py`—the code is modular and easy to extend.
 - **UI tweaks:** Update `User_Interface.py` for new features.
 
 ## License
